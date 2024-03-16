@@ -1,0 +1,35 @@
+{
+  "name": "obb-conformance-suite-runner",
+  "version": "1.0.0",
+  "author": "just-koohii",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/just-koohii/obb-conformance-suite-runner.git"
+  },
+  "keywords": [],
+  "main": "./dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "tsnd --rs ./src/index.ts  --watch",
+    "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.build.json --noEmit",
+    "lint": "eslint src __tests__ --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix"    
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.28",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-ristretto": "^1.0.5",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-prettier": "^5.1.2",
+    "eslint-plugin-promise": "^6.1.1",
+    "prettier": "^3.2.5",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.4.2"
+  }
+}
