@@ -20,3 +20,5 @@ dist
 # debug
 pnpm-error.log*
 
+# env
+.env
