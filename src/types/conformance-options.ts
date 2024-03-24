@@ -1,7 +1,14 @@
 import { Authorizer } from "./authorizer";
 
 export type ConformanceOptions = {
-  apiUrl: string;
+  /**
+   * The URL of the Conformance Suite.
+   *
+   * @example "https://www.certification.openid.net"
+   */
+  conformanceUrl: string;
+  /**
+   * The consent authorizer to use for the tests.
+   */
   authorizer: Authorizer;
-  bail?: boolean;
 };

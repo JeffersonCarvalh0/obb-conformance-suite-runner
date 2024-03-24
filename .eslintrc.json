@@ -20,7 +20,6 @@
       {
         "usePrettierrc": true
       }
-    ],
-    "no-console": "off"
+    ]
   }
 }

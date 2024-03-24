@@ -12,7 +12,7 @@ export const createAndRunPlan = async <T extends AnyObject>(
   const { id, modules } = await createPlan(planOptions);
 
   logger.info(
-    `Plan created, visit ${conformanceOptions.apiUrl}/plan-detail.html?plan=${id}. Test starting in 5 seconds...`,
+    `Plan created, visit ${conformanceOptions.conformanceUrl}/plan-detail.html?plan=${id}. Test starting in 5 seconds...`,
   );
 
   await sleep(5000);
