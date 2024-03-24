@@ -1,8 +1,10 @@
-import { apiClient } from "../../services/api-client";
-import { TestModuleInfoResponse } from "../../types";
+import { ConformanceContext, TestModuleInfoResponse } from "../../types";
 
-export const getModuleInfo = async (runnerId: string) => {
-  const { data } = await apiClient.get<TestModuleInfoResponse>(
+export const getModuleInfo = async (
+  context: ConformanceContext,
+  runnerId: string,
+) => {
+  const { data } = await context.apiClient.get<TestModuleInfoResponse>(
     `/api/info/${runnerId}`,
   );
 

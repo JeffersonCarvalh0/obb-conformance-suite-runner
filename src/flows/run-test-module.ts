@@ -2,20 +2,22 @@
 import { createRunner } from "../conformance-api/runner/create-runner";
 import { getRunnerStatus } from "../conformance-api/runner/get-runner-status";
 import { getModuleInfo } from "../conformance-api/test-module/get-module-info";
-import { PlanTestModule, TestModuleStatus, Authorizer } from "../types";
+import { PlanTestModule, TestModuleStatus, ConformanceContext } from "../types";
 import { sleep } from "../utils/sleep";
 import { visitUrl } from "../conformance-api/runner/visit-url";
 import { sendCallback } from "../conformance-api/test-module/send-callback";
 import { logger } from "../logger";
 
 export const runTestModule = async (
+  context: ConformanceContext,
   planId: string,
   module: PlanTestModule,
-  authorizer: Authorizer,
 ) => {
-  const { id } = await createRunner(planId, module);
+  const { authorizer } = context;
 
-  let moduleInfo = await getModuleInfo(id);
+  const { id } = await createRunner(context, planId, module);
+
+  let moduleInfo = await getModuleInfo(context, id);
 
   const finalStatuses: TestModuleStatus[] = [
     "FINISHED",
@@ -26,20 +28,20 @@ export const runTestModule = async (
   logger.info("Starting test polling");
 
   while (!finalStatuses.includes(moduleInfo.status)) {
-    moduleInfo = await getModuleInfo(id);
+    moduleInfo = await getModuleInfo(context, id);
 
     logger.info("Test status", { status: moduleInfo.status });
 
     const {
       browser: { urls },
-    } = await getRunnerStatus(id);
+    } = await getRunnerStatus(context, id);
 
     if (urls.length) {
       logger.info("Visiting authorization URL");
 
       let interactionCookies = await authorizer.startInteraction(urls[0]);
 
-      await visitUrl(id, urls[0]);
+      await visitUrl(context, id, urls[0]);
 
       logger.info("Interaction started");
 

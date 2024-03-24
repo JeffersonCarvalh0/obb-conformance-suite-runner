@@ -6,3 +6,4 @@ export type * from "./base-test-config";
 export type * from "./plan-options";
 export type * from "./any-object";
 export type * from "./authorizer";
+export type * from "./conformance-context";

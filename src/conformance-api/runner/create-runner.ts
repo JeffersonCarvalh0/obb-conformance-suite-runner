@@ -1,14 +1,21 @@
 import { logger } from "../../logger";
-import { apiClient } from "../../services/api-client";
-import { PlanTestModule, RunnerCreatedResponse } from "../../types";
+import {
+  ConformanceContext,
+  PlanTestModule,
+  RunnerCreatedResponse,
+} from "../../types";
 import { stringifyParam } from "../../utils/stringify-param";
 
-export const createRunner = async (planId: string, module: PlanTestModule) => {
+export const createRunner = async (
+  context: ConformanceContext,
+  planId: string,
+  module: PlanTestModule,
+) => {
   const { testModule, variant } = module;
 
   logger.trace("Creating runner");
 
-  const { data } = await apiClient.post<RunnerCreatedResponse>(
+  const { data } = await context.apiClient.post<RunnerCreatedResponse>(
     `/api/runner?plan=${planId}&test=${testModule}`,
     undefined,
     {

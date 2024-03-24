@@ -1,8 +1,10 @@
-import { apiClient } from "../../services/api-client";
-import { RunnerStatusResponse } from "../../types";
+import { ConformanceContext, RunnerStatusResponse } from "../../types";
 
-export const getRunnerStatus = async (runnerId: string) => {
-  const { data } = await apiClient.get<RunnerStatusResponse>(
+export const getRunnerStatus = async (
+  context: ConformanceContext,
+  runnerId: string,
+) => {
+  const { data } = await context.apiClient.get<RunnerStatusResponse>(
     `/api/runner/${runnerId}`,
   );
 
