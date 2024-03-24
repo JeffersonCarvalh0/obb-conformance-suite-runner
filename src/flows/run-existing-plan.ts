@@ -1,5 +1,6 @@
 /* eslint-disable no-await-in-loop */
 import { getPlanInfo } from "../conformance-api/plan/get-plan-info";
+import { logger } from "../logger";
 import { ConformanceOptions } from "../types";
 import { runTestModule } from "./run-test-module";
 
@@ -13,5 +14,5 @@ export const runExistingPlan = async (
     await runTestModule(planId, module, conformanceOptions.authorizer);
   }
 
-  console.log("Plan completed!");
+  logger.info("Plan completed!");
 };

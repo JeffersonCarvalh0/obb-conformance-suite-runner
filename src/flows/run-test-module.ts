@@ -6,6 +6,7 @@ import { PlanTestModule, TestModuleStatus, Authorizer } from "../types";
 import { sleep } from "../utils/sleep";
 import { visitUrl } from "../conformance-api/runner/visit-url";
 import { sendCallback } from "../conformance-api/test-module/send-callback";
+import { logger } from "../logger";
 
 export const runTestModule = async (
   planId: string,
@@ -22,33 +23,33 @@ export const runTestModule = async (
     "REVIEW",
   ];
 
-  console.log("Starting test polling");
+  logger.info("Starting test polling");
 
   while (!finalStatuses.includes(moduleInfo.status)) {
     moduleInfo = await getModuleInfo(id);
 
-    console.log("Test status", moduleInfo.status);
+    logger.info("Test status", { status: moduleInfo.status });
 
     const {
       browser: { urls },
     } = await getRunnerStatus(id);
 
     if (urls.length) {
-      console.log("Visiting authorization URL");
+      logger.info("Visiting authorization URL");
 
       let interactionCookies = await authorizer.startInteraction(urls[0]);
 
-      console.log("Interaction started");
-
       await visitUrl(id, urls[0]);
+
+      logger.info("Interaction started");
 
       interactionCookies = await authorizer.login(interactionCookies);
 
-      console.log("Logged in");
+      logger.info("Signed in successfully");
 
       const callbackUrl = await authorizer.confirm(interactionCookies);
 
-      console.log("Consent confirmed");
+      logger.info("Consent confirmed");
 
       await sendCallback(callbackUrl);
     }
@@ -58,7 +59,7 @@ export const runTestModule = async (
     }
   }
 
-  console.log("Test finished", {
+  logger.info("Test finished", {
     id,
     name: module.testModule,
     status: moduleInfo.status,

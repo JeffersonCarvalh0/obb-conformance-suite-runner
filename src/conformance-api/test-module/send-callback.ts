@@ -1,5 +1,6 @@
 import axios from "axios";
 import https from "https";
+import { logger } from "../../logger";
 
 const httpsAgent = new https.Agent({ rejectUnauthorized: false });
 
@@ -8,11 +9,11 @@ export const sendCallback = async (callbackUrl: string) => {
     httpsAgent,
   });
 
-  console.log("Got conformance callback page");
+  logger.trace("Got conformance callback page");
 
   const implictFlowUrl = data?.match(/xhr\.open\('POST', "(.*?)", true\)/)?.[1];
 
-  console.log("Implicit flow url", implictFlowUrl);
+  logger.trace("Implicit flow url", { implictFlowUrl });
 
   if (!implictFlowUrl) {
     throw new Error("No implicit flow url found");
@@ -27,5 +28,5 @@ export const sendCallback = async (callbackUrl: string) => {
     },
   });
 
-  console.log("Callback sent");
+  logger.info("Callback sent");
 };

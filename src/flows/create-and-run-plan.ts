@@ -1,5 +1,6 @@
 /* eslint-disable no-await-in-loop */
 import { createPlan } from "../conformance-api/plan/create-plan";
+import { logger } from "../logger";
 import { AnyObject, ConformanceOptions, PlanOptions } from "../types";
 import { sleep } from "../utils/sleep";
 import { runTestModule } from "./run-test-module";
@@ -10,7 +11,7 @@ export const createAndRunPlan = async <T extends AnyObject>(
 ) => {
   const { id, modules } = await createPlan(planOptions);
 
-  console.log(
+  logger.info(
     `Plan created, visit ${conformanceOptions.apiUrl}/plan-detail.html?plan=${id}. Test starting in 5 seconds...`,
   );
 
@@ -20,5 +21,5 @@ export const createAndRunPlan = async <T extends AnyObject>(
     await runTestModule(id, module, conformanceOptions.authorizer);
   }
 
-  console.log("Plan completed!");
+  logger.info("Plan completed!");
 };
