@@ -19,10 +19,8 @@ export const createConformance = (options: ConformanceOptions) => {
 
   const apiClient = axios.create({
     baseURL: conformanceUrl,
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
     httpsAgent,
+    ...(token && { headers: { Authorization: `Bearer ${token}` } }),
   });
 
   const context: ConformanceContext = {

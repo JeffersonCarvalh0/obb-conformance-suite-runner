@@ -12,11 +12,12 @@ export type ConformanceOptions = {
    */
   authorizer: Authorizer;
   /**
-   * The Conformance Suite Access Token
+   * The Conformance Suite Access Token.
+   * Not required if the Conformance Suite is running locally.
    *
    * Generated at conformanceUrl + "/api/token"
    *
    * @link https://www.certification.openid.net/tokens.html
    */
-  token: string;
+  token?: string;
 };
