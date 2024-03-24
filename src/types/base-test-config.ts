@@ -1,3 +1,5 @@
+import { AnyObject } from "./any-object";
+
 export type DirectoryDomain = "openbankingbrasil.org.br" | "opinbrasil.com.br";
 
 export type JWKS = {
@@ -158,5 +160,5 @@ export type BaseTestConfig = {
      * Resource creation/list URL.
      */
     resourceUrl: string;
-  } & Record<string, any>;
+  } & AnyObject;
 };
