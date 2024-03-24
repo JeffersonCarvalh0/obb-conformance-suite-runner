@@ -1,4 +1,3 @@
-import parse from "node-html-parser";
 import axios from "axios";
 import https from "https";
 
@@ -11,13 +10,7 @@ export const sendCallback = async (callbackUrl: string) => {
 
   console.log("Got conformance callback page");
 
-  const document = parse(data);
-
-  const scriptTag = document.getElementsByTagName("script").at(-1);
-
-  const implictFlowUrl = scriptTag?.innerText?.match(
-    /xhr\.open\('POST', "(.*?)", true\)/,
-  )?.[1];
+  const implictFlowUrl = data?.match(/xhr\.open\('POST', "(.*?)", true\)/)?.[1];
 
   console.log("Implicit flow url", implictFlowUrl);
 
