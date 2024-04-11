@@ -1,21 +1,18 @@
+import { AxiosInstance } from "axios";
 import { logger } from "../../logger";
-import {
-  ConformanceContext,
-  PlanTestModule,
-  RunnerCreatedResponse,
-} from "../../types";
+import { PlanTestModule, RunnerCreatedResponse } from "../../types";
 import { stringifyParam } from "../../utils/stringify-param";
 
 export const createRunner = async (
-  context: ConformanceContext,
+  apiClient: AxiosInstance,
   planId: string,
-  module: PlanTestModule,
+  planTestModule: PlanTestModule,
 ) => {
-  const { testModule, variant } = module;
+  const { testModule, variant } = planTestModule;
 
   logger.trace("Creating runner");
 
-  const { data } = await context.apiClient.post<RunnerCreatedResponse>(
+  const { data } = await apiClient.post<RunnerCreatedResponse>(
     `/api/runner?plan=${planId}&test=${testModule}`,
     undefined,
     {
@@ -28,9 +25,9 @@ export const createRunner = async (
     },
   );
 
-  logger.info(`${module.testModule} started`, {
+  logger.info(`${testModule} started`, {
     testId: data.id,
-    variant: module.variant,
+    variant,
   });
 
   return data;

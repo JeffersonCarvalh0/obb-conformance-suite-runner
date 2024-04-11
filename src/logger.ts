@@ -13,16 +13,24 @@ const pinoLogger = pino({
 });
 
 const getLogPayload = (...meta: AnyObject[]) => {
-  if (meta.length === 1) {
-    return meta[0];
+  if (!meta) {
+    return undefined;
   }
 
-  return meta;
+  const [logMeta] = meta;
+
+  if (logMeta?.length === 1) {
+    return {
+      meta: logMeta[0],
+    };
+  }
+
+  return { meta: logMeta };
 };
 
 export const logger = {
   trace: (message: string, ...meta: AnyObject[]) => {
-    const logPayload = getLogPayload(meta);
+    const logPayload = getLogPayload(...meta);
 
     pinoLogger.trace(logPayload, message);
   },

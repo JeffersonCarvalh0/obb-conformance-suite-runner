@@ -1,10 +1,11 @@
-import { ConformanceContext, TestModuleInfoResponse } from "../../types";
+import { AxiosInstance } from "axios";
+import { TestModuleInfoResponse } from "../../types";
 
 export const getModuleInfo = async (
-  context: ConformanceContext,
+  apiClient: AxiosInstance,
   runnerId: string,
 ) => {
-  const { data } = await context.apiClient.get<TestModuleInfoResponse>(
+  const { data } = await apiClient.get<TestModuleInfoResponse>(
     `/api/info/${runnerId}`,
   );
 

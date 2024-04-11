@@ -1,15 +1,19 @@
-/* eslint-disable no-await-in-loop */
-import { createPlan } from "../conformance-api/plan/create-plan";
 import { logger } from "../logger";
-import { AnyObject, ConformanceContext, PlanOptions } from "../types";
+import type {
+  AnyObject,
+  ConformanceContext,
+  PlanOptions,
+  FlowOverride,
+} from "../types";
 import { sleep } from "../utils/sleep";
 import { runTestModule } from "./run-test-module";
 
 export const createAndRunPlan = async <T extends AnyObject>(
   context: ConformanceContext,
   planOptions: PlanOptions<T>,
+  override: FlowOverride = {},
 ) => {
-  const { id, modules } = await createPlan(context, planOptions);
+  const { id, modules } = await context.apiClient.createPlan(planOptions);
 
   logger.info(
     `Plan created, visit ${context.conformanceUrl}/plan-detail.html?plan=${id}. Test starting in 5 seconds...`,
@@ -17,8 +21,13 @@ export const createAndRunPlan = async <T extends AnyObject>(
 
   await sleep(5000);
 
-  for (const module of modules) {
-    await runTestModule(context, id, module);
+  for (const currentModule of modules) {
+    await runTestModule(
+      context,
+      id,
+      currentModule,
+      override[currentModule.testModule],
+    );
   }
 
   logger.info("Plan completed!");

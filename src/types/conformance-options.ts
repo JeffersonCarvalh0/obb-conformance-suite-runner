@@ -1,5 +1,8 @@
 import { Authorizer } from "./authorizer";
 
+/**
+ * The options for the Conformance Suite Client.
+ */
 export type ConformanceOptions = {
   /**
    * The URL of the Conformance Suite.

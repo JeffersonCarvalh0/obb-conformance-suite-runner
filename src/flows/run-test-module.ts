@@ -1,23 +1,26 @@
-/* eslint-disable no-await-in-loop */
-import { createRunner } from "../conformance-api/runner/create-runner";
-import { getRunnerStatus } from "../conformance-api/runner/get-runner-status";
-import { getModuleInfo } from "../conformance-api/test-module/get-module-info";
-import { PlanTestModule, TestModuleStatus, ConformanceContext } from "../types";
+import type {
+  PlanTestModule,
+  TestModuleStatus,
+  ConformanceContext,
+  RunnerContext,
+  OverrideOptions,
+  AuthorizationFlow,
+} from "../types";
 import { sleep } from "../utils/sleep";
-import { visitUrl } from "../conformance-api/runner/visit-url";
 import { sendCallback } from "../conformance-api/test-module/send-callback";
 import { logger } from "../logger";
 
 export const runTestModule = async (
   context: ConformanceContext,
   planId: string,
-  module: PlanTestModule,
+  testModule: PlanTestModule,
+  testOverride?: OverrideOptions,
 ) => {
-  const { authorizer } = context;
+  const { authorizer, apiClient } = context;
 
-  const { id } = await createRunner(context, planId, module);
+  const { id } = await apiClient.createRunner(planId, testModule);
 
-  let moduleInfo = await getModuleInfo(context, id);
+  let moduleInfo = await apiClient.getModuleInfo(id);
 
   const finalStatuses: TestModuleStatus[] = [
     "FINISHED",
@@ -28,42 +31,72 @@ export const runTestModule = async (
   logger.info("Starting test polling");
 
   while (!finalStatuses.includes(moduleInfo.status)) {
-    moduleInfo = await getModuleInfo(context, id);
-
     logger.info("Test status", { status: moduleInfo.status });
 
     const {
-      browser: { urls },
-    } = await getRunnerStatus(context, id);
+      browser: { urls, visited },
+    } = await apiClient.getRunnerStatus(id);
+
+    const runnerContext: RunnerContext = {
+      apiClient,
+      status: moduleInfo.status,
+      testId: id,
+      testName: testModule.testModule,
+      urls,
+      visitedUrls: visited,
+    };
 
     if (urls.length) {
       logger.info("Visiting authorization URL");
 
-      let interactionCookies = await authorizer.startInteraction(urls[0]);
+      let interactionCookies = await authorizer.startInteraction(
+        urls[0],
+        runnerContext,
+      );
 
-      await visitUrl(context, id, urls[0]);
+      await apiClient.visitUrl(id, urls[0]);
 
       logger.info("Interaction started");
 
-      interactionCookies = await authorizer.login(interactionCookies);
+      interactionCookies = await authorizer.login(
+        interactionCookies,
+        runnerContext,
+      );
 
       logger.info("Signed in successfully");
 
-      const callbackUrl = await authorizer.confirm(interactionCookies);
+      let flow: AuthorizationFlow = "confirm";
 
-      logger.info("Consent confirmed");
+      if (testOverride?.interactions?.length) {
+        flow = testOverride.interactions.shift() as AuthorizationFlow;
+      }
+
+      let callbackUrl: string;
+
+      if (flow === "confirm") {
+        callbackUrl = await authorizer.confirm(
+          interactionCookies,
+          runnerContext,
+        );
+      } else {
+        callbackUrl = await authorizer.abort(interactionCookies, runnerContext);
+      }
+
+      logger.info(`Consent ${flow}ed`);
 
       await sendCallback(callbackUrl);
     }
 
     if (!finalStatuses.includes(moduleInfo.status)) {
       await sleep(3000);
+
+      moduleInfo = await apiClient.getModuleInfo(id);
     }
   }
 
   logger.info("Test finished", {
     id,
-    name: module.testModule,
+    name: testModule.testModule,
     status: moduleInfo.status,
     result: moduleInfo.result,
   });

@@ -1,18 +1,14 @@
-import {
-  PlanCreatedResponse,
-  AnyObject,
-  PlanOptions,
-  ConformanceContext,
-} from "../../types";
+import { AxiosInstance } from "axios";
+import { PlanCreatedResponse, AnyObject, PlanOptions } from "../../types";
 import { stringifyParam } from "../../utils/stringify-param";
 
 export const createPlan = async <T extends AnyObject>(
-  context: ConformanceContext,
+  apiClient: AxiosInstance,
   planOptions: PlanOptions<T>,
 ) => {
   const { planName, clientAuthType, fapiRequestMethod, config } = planOptions;
 
-  const { data } = await context.apiClient.post<PlanCreatedResponse>(
+  const { data } = await apiClient.post<PlanCreatedResponse>(
     `/api/plan?planName=${planName}`,
     config,
     {

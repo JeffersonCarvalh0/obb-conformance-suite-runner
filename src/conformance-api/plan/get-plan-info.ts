@@ -1,12 +1,8 @@
-import { ConformanceContext, PlanInfoResponse } from "../../types";
+import { AxiosInstance } from "axios";
+import { PlanInfoResponse } from "../../types";
 
-export const getPlanInfo = async (
-  context: ConformanceContext,
-  planId: string,
-) => {
-  const { data } = await context.apiClient.get<PlanInfoResponse>(
-    `/api/plan/${planId}`,
-  );
+export const getPlanInfo = async (apiClient: AxiosInstance, planId: string) => {
+  const { data } = await apiClient.get<PlanInfoResponse>(`/api/plan/${planId}`);
 
   return data;
 };

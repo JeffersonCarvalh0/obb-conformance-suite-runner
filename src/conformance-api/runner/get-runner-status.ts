@@ -1,10 +1,11 @@
-import { ConformanceContext, RunnerStatusResponse } from "../../types";
+import { AxiosInstance } from "axios";
+import { RunnerStatusResponse } from "../../types";
 
 export const getRunnerStatus = async (
-  context: ConformanceContext,
+  apiClient: AxiosInstance,
   runnerId: string,
 ) => {
-  const { data } = await context.apiClient.get<RunnerStatusResponse>(
+  const { data } = await apiClient.get<RunnerStatusResponse>(
     `/api/runner/${runnerId}`,
   );
 
