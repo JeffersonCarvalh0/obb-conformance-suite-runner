@@ -12,12 +12,15 @@ export const createPlan = async <T extends AnyObject>(
     `/api/plan?planName=${planName}`,
     config,
     {
-      params: {
-        variant: stringifyParam({
-          client_auth_type: clientAuthType,
-          fapi_auth_request_method: fapiRequestMethod,
-        }),
-      },
+      params:
+        clientAuthType && fapiRequestMethod
+          ? {
+              variant: stringifyParam({
+                client_auth_type: clientAuthType,
+                fapi_auth_request_method: fapiRequestMethod,
+              }),
+            }
+          : undefined,
     },
   );
 

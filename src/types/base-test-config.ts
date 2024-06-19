@@ -115,6 +115,12 @@ export type BaseTestConfig = {
      * Required for some tests plans.
      */
     apibase?: `https://matls-api.sandbox.directory.${DirectoryDomain}/`;
+    /**
+     * Directory participants list URL.
+     *
+     * Required for some tests plans.
+     */
+    participants?: `https://data.sandbox.directory.${DirectoryDomain}/participants`;
   };
   /**
    * Client 1 configuration.

@@ -5,7 +5,7 @@ import { FapiRequestMethod } from "./fapi-request-method";
 
 export type PlanOptions<ExtraConfig extends AnyObject> = {
   planName: string;
-  clientAuthType: ClientAuthType;
-  fapiRequestMethod: FapiRequestMethod;
+  clientAuthType?: ClientAuthType;
+  fapiRequestMethod?: FapiRequestMethod;
   config: BaseTestConfig & ExtraConfig;
 };
