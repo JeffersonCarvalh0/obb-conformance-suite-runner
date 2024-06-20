@@ -6,7 +6,7 @@ export const getRunnerLogs = async (
   runnerId: string,
 ) => {
   const { data } = await apiClient.get<TestLogResponse[]>(
-    `/api/logs/${runnerId}`,
+    `/api/log/${runnerId}`,
   );
 
   return data;
