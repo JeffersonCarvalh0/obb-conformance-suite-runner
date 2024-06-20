@@ -5,6 +5,7 @@ import type {
   RunnerContext,
   OverrideOptions,
   AuthorizationFlow,
+  CustomOverride,
 } from "../types";
 import { sleep } from "../utils/sleep";
 import { sendCallback } from "../conformance-api/test-module/send-callback";
@@ -85,6 +86,12 @@ export const runTestModule = async (
       logger.info(`Consent ${flow}ed`);
 
       await sendCallback(callbackUrl);
+    }
+
+    if (testOverride?.custom) {
+      const customOverrideResults = await Promise.all(testOverride.custom.map((custom) => custom(runnerContext)))
+
+      testOverride.custom = testOverride.custom.filter((_, i) => !customOverrideResults[i]);
     }
 
     if (!finalStatuses.includes(moduleInfo.status)) {
