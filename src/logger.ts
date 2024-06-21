@@ -1,5 +1,5 @@
 import pino from "pino";
-import { AnyObject } from "./types";
+import type { AnyObject } from "./types";
 
 const pinoLogger = pino({
   level: "debug",

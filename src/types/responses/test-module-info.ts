@@ -1,6 +1,6 @@
-import { ClientAuthType } from "../client-auth-type";
-import { FapiRequestMethod } from "../fapi-request-method";
-import { PlanTestModuleVariant } from "./plan-info";
+import type { ClientAuthType } from "../client-auth-type";
+import type { FapiRequestMethod } from "../fapi-request-method";
+import type { PlanTestModuleVariant } from "./plan-info";
 
 export type TestModuleStatus =
   | "CREATED"

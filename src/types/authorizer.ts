@@ -1,4 +1,4 @@
-import { RunnerContext } from "./runner-context";
+import type { RunnerContext } from "./runner-context";
 
 /**
  * Authorization server interaction steps.

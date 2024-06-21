@@ -1,9 +1,7 @@
 import { logger } from "../logger";
-import type {
-  ConformanceApiClient,
-  PlanTestModule,
-  RunnerOptions,
-} from "../types";
+import type { ConformanceApiClient } from "../types/conformance-api-client";
+import type { PlanTestModule } from "../types/responses/plan-info";
+import type { RunnerOptions } from "../types/runner-options";
 
 export const filterSkippedTests = async (
   apiClient: ConformanceApiClient,

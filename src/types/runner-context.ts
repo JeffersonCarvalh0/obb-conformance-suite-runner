@@ -1,5 +1,5 @@
-import { TestModuleInfoResponse } from "./responses";
-import { ConformanceApiClient } from "./conformance-api-client";
+import type { TestModuleInfoResponse } from "./responses";
+import type { ConformanceApiClient } from "./conformance-api-client";
 
 /**
  * The Test Runner context. Contains a subset of the current running test's information and the

@@ -1,4 +1,4 @@
-import { AnyObject } from "./any-object";
+import type { AnyObject } from "./any-object";
 
 export type DirectoryDomain = "openbankingbrasil.org.br" | "opinbrasil.com.br";
 

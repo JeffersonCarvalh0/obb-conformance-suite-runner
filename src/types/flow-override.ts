@@ -1,5 +1,5 @@
-import { AuthorizationFlow } from "./interaction-flow";
-import { RunnerContext } from "./runner-context";
+import type { AuthorizationFlow } from "./interaction-flow";
+import type { RunnerContext } from "./runner-context";
 
 /**
  * Custom flow override.

@@ -1,4 +1,4 @@
-import { Authorizer } from "./authorizer";
+import type { Authorizer } from "./authorizer";
 
 /**
  * The options for the Conformance Suite Client.

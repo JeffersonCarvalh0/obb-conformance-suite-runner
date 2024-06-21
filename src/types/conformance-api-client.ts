@@ -9,7 +9,7 @@ import type {
   RunnerStatusResponse,
   TestModuleInfoResponse,
 } from "./responses";
-import { TestLogResponse } from "./responses/test-logs";
+import type { TestLogResponse } from "./responses/test-logs";
 
 /**
  * The Conformance API client. Exposes a set of methods to interact with the

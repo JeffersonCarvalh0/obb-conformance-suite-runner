@@ -1,5 +1,5 @@
-import { ConformanceOptions } from "./conformance-options";
-import { ConformanceApiClient } from "./conformance-api-client";
+import type { ConformanceOptions } from "./conformance-options";
+import type { ConformanceApiClient } from "./conformance-api-client";
 
 /**
  * The context for the Conformance Suite Client. Contains the provided
