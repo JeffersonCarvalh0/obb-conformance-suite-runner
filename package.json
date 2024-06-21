@@ -1,6 +1,6 @@
 {
   "name": "obb-conformance-suite-runner",
-  "version": "1.0.0",
+  "version": "0.0.1-beta",
   "author": "just-koohii",
   "license": "MIT",
   "repository": {
@@ -12,6 +12,14 @@
   "files": [
     "dist"
   ],
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.js",
+      "types": "./dist/types/index.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
   "scripts": {
     "dev": "tsnd --rs ./src/index.ts  --watch",
     "build": "rm -rf dist && tsc -p tsconfig.build.json",
