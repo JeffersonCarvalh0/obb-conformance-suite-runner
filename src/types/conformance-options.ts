@@ -18,7 +18,7 @@ export type ConformanceOptions = {
    * The Conformance Suite Access Token.
    * Not required if the Conformance Suite is running locally.
    *
-   * Generated at conformanceUrl + "/api/token"
+   * Generated at conformanceUrl + "/tokens.html"
    *
    * @link https://www.certification.openid.net/tokens.html
    */
