@@ -6,6 +6,7 @@ import type {
   PlanOptions,
   ConformanceContext,
   FlowOverride,
+  RunnerOptions,
 } from "./types";
 import { createApiClient } from "./utils/create-api-client";
 
@@ -20,9 +21,13 @@ export const createConformanceClient = (options: ConformanceOptions) => {
   return {
     createAndRun: <T extends AnyObject>(
       planOptions: PlanOptions<T>,
+      options?: Partial<RunnerOptions>,
       override?: FlowOverride,
-    ) => createAndRunPlan(context, planOptions, override),
-    runExisting: async (planId: string, override?: FlowOverride) =>
-      runExistingPlan(context, planId, override),
+    ) => createAndRunPlan(context, planOptions, options, override),
+    runExisting: async (
+      planId: string,
+      options?: Partial<RunnerOptions>,
+      override?: FlowOverride,
+    ) => runExistingPlan(context, planId, options, override),
   };
 };

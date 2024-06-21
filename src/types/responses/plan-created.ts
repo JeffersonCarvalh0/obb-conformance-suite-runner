@@ -7,5 +7,6 @@ export type PlanCreatedResponse = {
       fapi_profile: "openbanking_brazil";
       fapi_response_mode: "plain_response";
     };
+    instances: string[];
   }[];
 };

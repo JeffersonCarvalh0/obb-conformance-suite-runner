@@ -11,3 +11,4 @@ export type * from "./interaction-flow";
 export type * from "./plan-options";
 export type * from "./responses";
 export type * from "./runner-context";
+export type * from "./runner-options";

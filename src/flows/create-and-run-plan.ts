@@ -4,6 +4,7 @@ import type {
   ConformanceContext,
   PlanOptions,
   FlowOverride,
+  RunnerOptions,
 } from "../types";
 import { sleep } from "../utils/sleep";
 import { runTestModule } from "./run-test-module";
@@ -11,8 +12,17 @@ import { runTestModule } from "./run-test-module";
 export const createAndRunPlan = async <T extends AnyObject>(
   context: ConformanceContext,
   planOptions: PlanOptions<T>,
+  options?: Partial<Pick<RunnerOptions, "bail">>,
   override: FlowOverride = {},
 ) => {
+  const runnerOptions = {
+    skipPassed: true,
+    skipReview: true,
+    skipWarning: true,
+    skipFailed: false,
+    bail: options?.bail ?? false,
+  };
+
   const { id, modules } = await context.apiClient.createPlan(planOptions);
 
   logger.info(
@@ -26,6 +36,7 @@ export const createAndRunPlan = async <T extends AnyObject>(
       context,
       id,
       currentModule,
+      runnerOptions,
       override[currentModule.testModule],
     );
   }

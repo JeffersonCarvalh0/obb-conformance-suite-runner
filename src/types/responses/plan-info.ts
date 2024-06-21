@@ -6,6 +6,7 @@ export type PlanTestModuleVariant = {
 export type PlanTestModule = {
   testModule: string;
   variant: PlanTestModuleVariant;
+  instances: string[];
 };
 
 export type PlanInfoResponse = {

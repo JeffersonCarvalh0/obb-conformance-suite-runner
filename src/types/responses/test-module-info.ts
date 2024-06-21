@@ -6,13 +6,13 @@ export type TestModuleStatus =
   | "CREATED"
   | "RUNNING"
   | "WAITING"
-  | "REVIEW"
   | "INTERRUPTED"
   | "FINISHED";
 
 export type TestModuleResult =
   | null
   | "PASSED"
+  | "REVIEW"
   | "WARNING"
   | "SKIPPED"
   | "FAILED";

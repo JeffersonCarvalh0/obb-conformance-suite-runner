@@ -1,19 +1,21 @@
 import type {
   PlanTestModule,
-  TestModuleStatus,
   ConformanceContext,
   RunnerContext,
   OverrideOptions,
   AuthorizationFlow,
+  RunnerOptions,
 } from "../types";
 import { sleep } from "../utils/sleep";
 import { sendCallback } from "../conformance-api/test-module/send-callback";
 import { logger } from "../logger";
+import { finalStatuses } from "../constants/final-statuses";
 
 export const runTestModule = async (
   context: ConformanceContext,
   planId: string,
   testModule: PlanTestModule,
+  runnerOptions: RunnerOptions,
   testOverride?: OverrideOptions,
 ) => {
   const { authorizer, apiClient } = context;
@@ -22,13 +24,11 @@ export const runTestModule = async (
 
   let moduleInfo = await apiClient.getModuleInfo(id);
 
-  const finalStatuses: TestModuleStatus[] = [
-    "FINISHED",
-    "INTERRUPTED",
-    "REVIEW",
-  ];
-
   logger.info("Starting test polling");
+
+  if (runnerOptions.bail && moduleInfo.status === "INTERRUPTED") {
+    throw new Error("Test failed");
+  }
 
   while (!finalStatuses.includes(moduleInfo.status)) {
     logger.info("Test status", { status: moduleInfo.status });
