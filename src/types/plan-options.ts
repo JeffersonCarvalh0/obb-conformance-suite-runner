@@ -3,7 +3,7 @@ import type { BaseTestConfig } from "./base-test-config";
 import type { ClientAuthType } from "./client-auth-type";
 import type { FapiRequestMethod } from "./fapi-request-method";
 
-export type PlanOptions<ExtraConfig extends AnyObject> = {
+export type PlanOptions<ExtraConfig extends AnyObject = AnyObject> = {
   planName: string;
   clientAuthType?: ClientAuthType;
   fapiRequestMethod?: FapiRequestMethod;

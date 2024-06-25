@@ -96,7 +96,7 @@ export type BaseTestConfig = {
      *
      * Required for some tests plans.
      */
-    client_id: string;
+    client_id?: string;
     /**
      * Directory keystore URL.
      *
@@ -161,10 +161,10 @@ export type BaseTestConfig = {
     /**
      * Consent creation URL.
      */
-    consentUrl: string;
+    consentUrl?: string;
     /**
      * Resource creation/list URL.
      */
-    resourceUrl: string;
+    resourceUrl?: string;
   } & AnyObject;
 };
