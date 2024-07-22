@@ -21,4 +21,4 @@ dist
 pnpm-error.log*
 
 # env
-.env
+.env*

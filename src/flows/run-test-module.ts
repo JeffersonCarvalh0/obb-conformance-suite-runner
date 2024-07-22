@@ -49,7 +49,9 @@ export const runTestModule = async (
     if (urls.length) {
       logger.info("Visiting authorization URL");
 
-      let interactionCookies = await authorizer.startInteraction(
+      let callbackUrl: string;
+
+      const interactionResult = await authorizer.startInteraction(
         urls[0],
         runnerContext,
       );
@@ -58,33 +60,42 @@ export const runTestModule = async (
 
       logger.info("Interaction started");
 
-      interactionCookies = await authorizer.login(
-        interactionCookies,
-        runnerContext,
-      );
+      if (interactionResult.includes("http")) {
+        logger.info("Authorization interrupted, sending callback");
 
-      logger.info("Signed in successfully");
+        callbackUrl = interactionResult;
 
-      let flow: AuthorizationFlow = "confirm";
-
-      if (testOverride?.interactions?.length) {
-        flow = testOverride.interactions.shift() as AuthorizationFlow;
-      }
-
-      let callbackUrl: string;
-
-      if (flow === "confirm") {
-        callbackUrl = await authorizer.confirm(
-          interactionCookies,
+        await sendCallback(callbackUrl);
+      } else {
+        const interactionCookies = await authorizer.login(
+          interactionResult,
           runnerContext,
         );
-      } else {
-        callbackUrl = await authorizer.abort(interactionCookies, runnerContext);
+
+        logger.info("Signed in successfully");
+
+        let flow: AuthorizationFlow = "confirm";
+
+        if (testOverride?.interactions?.length) {
+          flow = testOverride.interactions.shift() as AuthorizationFlow;
+        }
+
+        if (flow === "confirm") {
+          callbackUrl = await authorizer.confirm(
+            interactionCookies,
+            runnerContext,
+          );
+        } else {
+          callbackUrl = await authorizer.abort(
+            interactionCookies,
+            runnerContext,
+          );
+        }
+
+        logger.info(`Consent ${flow}ed`);
+
+        await sendCallback(callbackUrl);
       }
-
-      logger.info(`Consent ${flow}ed`);
-
-      await sendCallback(callbackUrl);
     }
 
     if (testOverride?.custom) {

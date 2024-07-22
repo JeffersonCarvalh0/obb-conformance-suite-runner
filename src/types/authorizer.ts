@@ -12,7 +12,7 @@ export type Authorizer = {
    * @param url - The URL to start the interaction with the authorization server.
    * @param context - The context of the current test run.
    *
-   * @returns The cookies to be used in the next steps.
+   * @returns The cookies to be used in the next steps or a callback URL if the interaction fails.
    */
   startInteraction: (url: string, context: RunnerContext) => Promise<string>;
   /**
