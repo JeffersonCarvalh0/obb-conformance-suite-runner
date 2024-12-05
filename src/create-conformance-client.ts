@@ -19,6 +19,7 @@ export const createConformanceClient = (options: ConformanceOptions) => {
   };
 
   return {
+    getAvailablePlans: async () => apiClient.getAvailablePlans(),
     createAndRun: <T extends AnyObject>(
       planOptions: PlanOptions<T>,
       options?: Partial<RunnerOptions>,

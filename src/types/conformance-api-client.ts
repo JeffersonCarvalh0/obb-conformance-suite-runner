@@ -19,6 +19,7 @@ export type ConformanceApiClient = {
   createPlan: <T extends AnyObject>(
     planOptions: PlanOptions<T>,
   ) => Promise<PlanCreatedResponse>;
+  getAvailablePlans: () => Promise<PlanInfoResponse[]>;
   getPlanInfo: (planId: string) => Promise<PlanInfoResponse>;
   createRunner: (
     planId: string,
