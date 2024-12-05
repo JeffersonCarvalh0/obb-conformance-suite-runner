@@ -14,6 +14,7 @@ import { visitUrl } from "../conformance-api/runner/visit-url";
 import { getModuleInfo } from "../conformance-api/test-module/get-module-info";
 import { sendCallback } from "../conformance-api/test-module/send-callback";
 import { getRunnerLogs } from "../conformance-api/runner/get-runner-logs";
+import { getAvailablePlans } from "../conformance-api/plan/get-available-plans";
 
 export const createApiClient = (
   options: ConformanceOptions,
@@ -33,6 +34,7 @@ export const createApiClient = (
   return {
     createPlan: <T extends AnyObject>(planOptions: PlanOptions<T>) =>
       createPlan(axiosInstance, planOptions),
+    getAvailablePlans: () => getAvailablePlans(axiosInstance),
     getPlanInfo: (planId) => getPlanInfo(axiosInstance, planId),
     createRunner: (planId, planTestModule) =>
       createRunner(axiosInstance, planId, planTestModule),
