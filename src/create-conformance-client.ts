@@ -1,3 +1,4 @@
+import { eventEmitter } from "./eventEmitter";
 import { createAndRunPlan } from "./flows/create-and-run-plan";
 import { runExistingPlan } from "./flows/run-existing-plan";
 import type {
@@ -30,5 +31,6 @@ export const createConformanceClient = (options: ConformanceOptions) => {
       options?: Partial<RunnerOptions>,
       override?: FlowOverride,
     ) => runExistingPlan(context, planId, options, override),
+    eventEmitter,
   };
 };

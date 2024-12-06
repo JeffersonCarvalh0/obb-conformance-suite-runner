@@ -1,3 +1,4 @@
+import { eventEmitter } from "../eventEmitter";
 import { logger } from "../logger";
 import type {
   AnyObject,
@@ -23,18 +24,20 @@ export const createAndRunPlan = async <T extends AnyObject>(
     bail: options?.bail ?? false,
   };
 
-  const { id, modules } = await context.apiClient.createPlan(planOptions);
+  const planCreatedResponse = await context.apiClient.createPlan(planOptions);
 
   logger.info(
-    `Plan created, visit ${context.conformanceUrl}/plan-detail.html?plan=${id}. Test starting in 5 seconds...`,
+    `Plan created, visit ${context.conformanceUrl}/plan-detail.html?plan=${planCreatedResponse.id}. Test starting in 5 seconds...`,
   );
+
+  eventEmitter.emit("planCreated", planCreatedResponse);
 
   await sleep(5000);
 
-  for (const currentModule of modules) {
+  for (const currentModule of planCreatedResponse.modules) {
     await runTestModule(
       context,
-      id,
+      planCreatedResponse.id,
       currentModule,
       runnerOptions,
       override[currentModule.testModule],
@@ -42,4 +45,5 @@ export const createAndRunPlan = async <T extends AnyObject>(
   }
 
   logger.info("Plan completed!");
+  eventEmitter.emit("planCompleted", planCreatedResponse);
 };

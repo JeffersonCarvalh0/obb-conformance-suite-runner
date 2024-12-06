@@ -24,6 +24,7 @@
   "scripts": {
     "dev": "tsnd --rs ./src/index.ts  --watch",
     "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "prepare": "npm run build",
     "typecheck": "tsc -p tsconfig.build.json --noEmit",
     "lint": "eslint src __tests__ --ext .ts",
     "lint:fix": "eslint src --ext .ts --fix"

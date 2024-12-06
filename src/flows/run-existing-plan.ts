@@ -1,3 +1,4 @@
+import { eventEmitter } from "../eventEmitter";
 import { logger } from "../logger";
 import type { ConformanceContext, FlowOverride, RunnerOptions } from "../types";
 import { filterSkippedTests } from "../utils/filter-skipped-tests";
@@ -17,11 +18,11 @@ export const runExistingPlan = async (
     bail: options?.bail ?? false,
   };
 
-  const { modules } = await context.apiClient.getPlanInfo(planId);
+  const planInfo = await context.apiClient.getPlanInfo(planId);
 
   const filteredModules = await filterSkippedTests(
     context.apiClient,
-    modules,
+    planInfo.modules,
     runnerOptions,
   );
 
@@ -36,4 +37,5 @@ export const runExistingPlan = async (
   }
 
   logger.info("Plan completed!");
+  eventEmitter.emit("planCompleted", planInfo);
 };

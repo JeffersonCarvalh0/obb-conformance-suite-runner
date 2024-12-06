@@ -5,11 +5,13 @@ import type {
   OverrideOptions,
   AuthorizationFlow,
   RunnerOptions,
+  TestModuleStatus,
 } from "../types";
 import { sleep } from "../utils/sleep";
 import { sendCallback } from "../conformance-api/test-module/send-callback";
 import { logger } from "../logger";
 import { finalStatuses } from "../constants/final-statuses";
+import { eventEmitter } from "../eventEmitter";
 
 export const runTestModule = async (
   context: ConformanceContext,
@@ -22,16 +24,27 @@ export const runTestModule = async (
 
   const { id } = await apiClient.createRunner(planId, testModule);
 
+  let previousStatus: TestModuleStatus | undefined;
   let moduleInfo = await apiClient.getModuleInfo(id);
 
   logger.info("Starting test polling");
+  eventEmitter.emit("testModuleStart", moduleInfo);
 
-  if (runnerOptions.bail && moduleInfo.status === "INTERRUPTED") {
-    throw new Error("Test failed");
+  if (moduleInfo.status === "INTERRUPTED") {
+    eventEmitter.emit("testModuleError", moduleInfo);
+
+    if (runnerOptions.bail) {
+      throw new Error("Test failed");
+    }
   }
 
   while (!finalStatuses.includes(moduleInfo.status)) {
     logger.info("Test status", { status: moduleInfo.status });
+
+    if (previousStatus !== moduleInfo.status) {
+      eventEmitter.emit("testModuleUpdate", moduleInfo);
+      previousStatus = moduleInfo.status;
+    }
 
     const {
       browser: { urls, visited },
@@ -122,4 +135,6 @@ export const runTestModule = async (
     status: moduleInfo.status,
     result: moduleInfo.result,
   });
+
+  eventEmitter.emit("testModuleFinish", moduleInfo);
 };
